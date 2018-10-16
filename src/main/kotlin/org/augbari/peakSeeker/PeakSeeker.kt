@@ -23,7 +23,7 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
 
     // Peak
     var peak = Peak()
-    private val peakThreshold: Double = 4.0
+    private val peakThreshold: Double = 1.2
 
     /**
      * Connect to mqtt server providing username and password.
@@ -108,8 +108,8 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
         val zSeries = accelerometer.series.map { it[2] }
         
         xSeries.detectPeak(Peak.PeakAxis.X, peakThreshold)
-        ySeries.detectPeak(Peak.PeakAxis.Y, peakThreshold)
-        zSeries.detectPeak(Peak.PeakAxis.Z, peakThreshold)
+        //ySeries.detectPeak(Peak.PeakAxis.Y, peakThreshold)
+        //zSeries.detectPeak(Peak.PeakAxis.Z, peakThreshold)
 
 
         // If peak is found
@@ -118,9 +118,9 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
             // Call status changed callback
             onStatusChangedCallback()
 
-            // Reset system after 300 milliseconds
+            // Reset system after 500 milliseconds
             async {
-                Thread.sleep(1000)
+                Thread.sleep(500)
                 accelerometer.clearSeries()
                 peak = Peak()
             }

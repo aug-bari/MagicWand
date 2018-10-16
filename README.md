@@ -1,7 +1,13 @@
-# Peak Seeker
-A library used to check peak of a signal by a callback. Signal datas are coming from an accelerometer using mqtt communication protocol.
+# Magic Wand
+MagicWand allows you to easily interact with your powerpoint slides and much more by simpling simulating keyboard keys through a sensor connected to an Arduino and communicating to MagicWandServer via MQTT protocol. 
 
-### Implementation
+Modules used to build this project:
+https://github.com/aug-bari/MagicWandServer
+https://github.com/aug-bari/PeakSeeker
+https://github.com/aug-bari/MqttKotlinAPI
+
+### Implementation of PeekSeeker
+Use this module to receive mqtt data packets and check if a peak is found.
 ```sh
 class Example {
 

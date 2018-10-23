@@ -4,34 +4,7 @@ MagicWand allows you to easily interact with your powerpoint slides and much mor
 Modules used to build this project:<br>
 https://github.com/aug-bari/MagicWandServer<br>
 https://github.com/aug-bari/PeakSeeker<br>
-https://github.com/aug-bari/MqttKotlinAPI
+https://github.com/aug-bari/MqttKotlinAPI<br>
+https://github.com/aug-bari/MPU6050viaMQTT
 
-### Implementation of PeekSeeker
-Use this module to receive mqtt data packets and check if a peak is found.
-```sh
-class Example {
-
-    companion object : OnPeakListener {
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-
-            // Create PeakSeeker object
-            val peakSeeker = PeakSeeker("tcp://mybroker.com", "PeakSeekerClientName")
-            
-            // Perform connection
-            peakSeeker.connect("username", "password")
-            
-            // Subscribe to topic
-            peakSeeker.subscribe("topicName")
-
-        }
-
-        //Set custom callback to see status change
-        override fun onPeak(peak: Peak) {
-            println("Detected ${peak.type} peak on ${peak.axis} axis with value: ${peak.value}")
-        }
-    }
-
-}
-```
+Made with ❤ by AUG-Bari

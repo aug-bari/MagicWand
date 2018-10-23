@@ -1,5 +1,6 @@
 package org.augbari.peakSeeker
 
+import org.jfree.ui.RefineryUtilities
 import java.awt.Robot
 import java.awt.event.KeyEvent
 
@@ -15,8 +16,13 @@ class Example {
         @JvmStatic
         fun main(args: Array<String>) {
 
+            val demo = Window("X Accel Data")
+            demo.pack()
+            RefineryUtilities.centerFrameOnScreen(demo)
+            demo.isVisible = true
+
             // Create PeakSeeker object
-            val peakSeeker = PeakSeeker("tcp://broker.shiftr.io", "PeakSeeker", this)
+            val peakSeeker = PeakSeeker("tcp://broker.shiftr.io", "PeakSeeker", this, demo)
 
             // Perform connection
             peakSeeker.connect("aug-bari", "PasswordSuperSicura42")
@@ -29,7 +35,7 @@ class Example {
         override fun onPeak(peak: Peak) {
             //println("Detected ${peak.type} peak on ${peak.axis} axis with value: ${peak.value}")
 
-            when(peak.toString().toLowerCase()) {
+            when(peak.type.toString().toLowerCase()) {
                 "left" -> {
                     println("Received left command.")
                     r.keyPress(KeyEvent.VK_LEFT)

@@ -32,6 +32,11 @@ dependencies {
     implementation "org.json:json:20140107"
     implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21"
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+
+    // https://mvnrepository.com/artifact/org.jfree/jfreechart
+    compile group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
+
 }
 
 compileKotlin {

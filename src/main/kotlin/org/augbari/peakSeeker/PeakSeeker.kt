@@ -5,6 +5,7 @@ import org.augbari.Mqtt
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import org.jfree.ui.ApplicationFrame
 import org.json.JSONObject
 import kotlin.math.abs
 
@@ -12,7 +13,7 @@ import kotlin.math.abs
  * Peak Seeker is a library used to check if a peak is reached by an accelerometer communication via mqtt broker
  *
  * */
-class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListener): MqttCallback {
+class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListener, private val frame: Window): MqttCallback {
 
     // MQTT
     private val mqttClient = Mqtt(broker, clientName)
@@ -23,7 +24,7 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
 
     // Peak
     var peak = Peak()
-    private val peakThreshold: Double = 1.2
+    private val peakThreshold: Double = 4.0
 
     /**
      * Connect to mqtt server providing username and password.
@@ -82,6 +83,7 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
         when(topic) {
             accelerometerTopic -> {
                 accelerometer.setValues(doubleArrayOf(accel.getDouble("x"), accel.getDouble("y"), accel.getDouble("z")))
+                frame.add(accel.getDouble("x"))
             }
             "disconnect" -> {
                 disconnect()
@@ -99,6 +101,9 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
      * Check peak in current series.
      *
      * Analyze points and check if a peak is reached in all axes.
+     *
+     * Thanks to: https://stackoverflow.com/questions/22583391/peak-signal-detection-in-realtime-timeseries-data
+     *
      * */
     private fun checkPeak() {
 
@@ -110,6 +115,16 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
         xSeries.detectPeak(Peak.PeakAxis.X, peakThreshold)
         //ySeries.detectPeak(Peak.PeakAxis.Y, peakThreshold)
         //zSeries.detectPeak(Peak.PeakAxis.Z, peakThreshold)
+
+        /*if(xSeries.count() > 10) {
+            val lag = 10
+            val threshold = 10.0f
+            val influence = 0.0f
+            val thresholdingResults = smoothedZScore(xSeries, lag, threshold.toDouble(), influence.toDouble())
+            val signal = thresholdingResults.first.map { it.toFloat() }
+
+            println(signal.last())
+        }*/
 
 
         // If peak is found
@@ -129,6 +144,22 @@ class PeakSeeker(broker: String, clientName: String, var listener: OnPeakListene
     }
 
     private fun List<Double>.detectPeak(axis: Peak.PeakAxis, peakThreshold: Double) {
+
+        /*val value = this.average()
+
+        if(value > .3) {
+
+            // Update status
+            when (axis) {
+                Peak.PeakAxis.X -> peak.type = if (value > 0) Peak.PeakType.RIGHT else Peak.PeakType.LEFT
+                Peak.PeakAxis.Y -> peak.type = if (value > 0) Peak.PeakType.FORWARD else Peak.PeakType.BACKWARD
+                Peak.PeakAxis.Z -> peak.type = if (value > 0) Peak.PeakType.UP else Peak.PeakType.DOWN
+            }
+
+            peak.value = value
+            peak.axis = axis
+        }*/
+
         this.forEachIndexed { index, value->
             if(index > 0) {
                 // peak is found
